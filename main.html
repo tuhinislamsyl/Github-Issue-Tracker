@@ -10,93 +10,155 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <!-- Font Awsome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="./styles/style.css">
-    <link rel="stylesheet" href="./styles/tailwind.config.js">
 </head>
 
 <body>
+
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+
         <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+
             <div class="flex justify-between items-center h-20">
+
+                <!-- Logo -->
+
                 <div class="flex items-center gap-3">
-                    <img src="./assets/github-logo.png" alt="logo" class="w-10 h-10 object-contain">
+                    <img src="./assets/github-logo.png" class="w-10 h-10 object-contain">
                     <h1 class="text-xl font-bold text-slate-800">GitHub Issues Tracker</h1>
                 </div>
 
+                <!-- Search + Button -->
+
                 <div class="flex items-center gap-4">
+
+                    <!-- Search -->
+
                     <div class="relative hidden md:flex items-center">
+
                         <i class="fa-solid fa-magnifying-glass absolute left-3 text-gray-500 z-10"></i>
 
-                        <input type="text" placeholder="Search issues..."
-                            class="input input-bordered h-10 w-64 bg-slate-50 pl-10 focus:bg-white focus:outline-[#6000FF] border-gray-300" />
+                        <input id="input-text" type="text" placeholder="Search issues..."
+                            class="input input-bordered h-10 w-64 bg-slate-50 pl-10 focus:bg-white border-gray-300" />
+
                     </div>
+
+                    <!-- New Issue Button -->
 
                     <button
                         class="btn bg-[#6000FF] hover:bg-[#5000D2] border-none text-white px-5 h-10 min-h-[40px] normal-case font-semibold">
-                        <i class="fa-solid fa-plus mr-1"></i> New Issue
+
+                        <i class="fa-solid fa-plus mr-1"></i>
+                        New Issue
+
                     </button>
+
                 </div>
+
             </div>
+
         </div>
+
     </header>
 
+
+    <!-- Toggle Buttons -->
+
     <main class="flex justify-center mt-16 mb-10 px-4">
+
         <div class="inline-flex bg-white border border-gray-200 rounded-xl p-4.5 shadow-sm w-full max-w-5xl gap-3">
-            <button
-                class="px-12 py-2.5 rounded-lg bg-[#6000FF] text-white font-semibold text-sm transition-all shadow-md shadow-purple-100 border border-gray-200 g">
+
+            <button onclick="showAll(); btnController(this)" id="allBtn"
+                class="px-12 py-2.5 rounded-lg bg-[#6000FF] text-white font-semibold text-sm">
+
                 All
+
             </button>
 
-            <button
-                class="px-12 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 font-medium text-sm transition-all shadow-md shadow-purple-100 border border-gray-200 g">
+            <button onclick="showOpen(); btnController(this)" id="openBtn"
+                class="px-12 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 font-medium text-sm">
+
                 Open
+
             </button>
 
-            <button
-                class="px-12 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 font-medium text-sm transition-all shadow-md shadow-purple-100 border border-gray-200 g">
+            <button onclick="showClose(); btnController(this)" id="closed"
+                class="px-12 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 font-medium text-sm">
+
                 Closed
+
             </button>
+
         </div>
+
     </main>
-    <section class="flex justify-center mb-10 px-4">
-        <div
-            class="flex justify-between items-center bg-white border border-gray-200 rounded-xl p-4.5 shadow-sm w-full max-w-5xl">
-    
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-[#6000FF]">
-                    <i class="fa-solid fa-circle-nodes text-xl"></i>
+
+
+    <section class="flex justify-center px-4 mb-10">
+
+        <div class="w-full max-w-5xl">
+
+            <!-- Header -->
+
+            <div class="flex justify-between items-center bg-white border border-gray-200 rounded-t-xl p-4.5 shadow-sm">
+
+                <div class="flex items-center gap-4">
+
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-[#6000FF]">
+                        <i class="fa-solid fa-circle-nodes text-xl"></i>
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-xl font-bold text-slate-800">
+                            <span id="issue-counter">0</span> Issues
+                        </h2>
+
+                        <p class="text-sm text-gray-500">
+                            Track and manage your project issues
+                        </p>
+
+                    </div>
+
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800 leading-tight">50 Issues</h2>
-                    <p class="text-sm text-gray-500">Track and manage your project issues</p>
-                </div>
+
             </div>
-    
-            <div class="flex gap-6 pr-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                    <span class="text-sm font-bold text-slate-700">Open</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-[#6000FF] rounded-full"></span>
-                    <span class="text-sm font-bold text-slate-700">Closed</span>
-                </div>
+
+
+            <!-- Spinner -->
+
+            <div id="loading" class="text-center py-6 hidden">
+
+                <span class="loading loading-spinner loading-lg"></span>
+
             </div>
+
+
+            <!-- Cards Container -->
+
+            <div id="cards"
+                class="bg-gray-50 border-x border-b border-gray-200 p-6 rounded-b-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+            </div>
+
         </div>
+
     </section>
-    
+
+
+    <!-- Modal -->
+
+    <dialog id="issueDetailsModal" class="modal"></dialog>
+
     <script src="./script/main.js"></script>
+
 </body>
 
 </html>
