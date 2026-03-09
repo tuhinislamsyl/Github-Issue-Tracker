@@ -1,22 +1,23 @@
 const spinner = document.getElementById("loading");
-const issueTitle = document.getElementById("modal-title");
-const issueDescription = document.getElementById("modal-description");
-const issuelabelContainer = document.getElementById("modal-labels");
-const issueContent = document.getElementById("modal-content");
-const issueAssignee = document.getElementById("modal-assignee-name");
-const issuePriority = document.getElementById("modal-priority");
-const issuebutton = document.getElementById("modal-button");
-let issueDetailsModal = document.getElementById("issueDetailsModal");
-const modal = document.getElementById("modal");
-// console.log(modal);
 
-//toggle button 
+let issueDetailsModal = document.getElementById("issueDetailsModal");
 
 const allBtn = document.getElementById("allBtn");
 const openBtn = document.getElementById("openBtn");
 const closed = document.getElementById("closed");
 
 
+// spinner helpers
+function showSpinner() {
+    spinner.classList.remove("hidden");
+}
+
+function hideSpinner() {
+    spinner.classList.add("hidden");
+}
+
+
+// toggle button
 function btnController(button) {
 
     const buttons = [allBtn, openBtn, closed];
@@ -33,55 +34,68 @@ function btnController(button) {
 
 
 async function issues() {
-    spinner.classList.remove("hidden");
+
+    showSpinner();
+
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
     const data = await res.json();
-    // console.log(data);
+
     renderIssueCards(data.data);
-    spinner.classList.add("hidden");
+
+    hideSpinner();
 }
 
 let count = 1;
 
+
 function renderIssueCards(issueList) {
+
     const cardsContainer = document.getElementById("cards");
+
     cardsContainer.innerHTML = "";
+
     count = 1;
+
     displayIssues(issueList);
 
     const issueCounter = document.getElementById("issue-counter");
+
     issueCounter.innerHTML = issueList.length;
-    // console.log(issueList.length);
 }
 
+
 function displayIssues(issues) {
-    // console.log(issues);
+
     issues.forEach((issue) => {
+
         const card = document.createElement("div");
+
         card.classList.add("issue-card");
+
         card.dataset.status = issue.status;
+
         card.dataset.issueId = issue.id;
+
         let unique = count++;
-        card.innerHTML = `${issue.status === "open" ? `<div onclick="openModal('${issue.id}')" class="card bg-base-100 p-0 bg-white rounded-2xl border-t-4 border-t-[#00A96E]">
+
+        card.innerHTML = `${issue.status === "open" ?
+
+            `<div onclick="openModal('${issue.id}')" class="card bg-base-100 p-0 bg-white rounded-2xl border-t-4 border-t-[#00A96E]">
                     <div class="p-3 h-72">
                         <figure class="flex justify-between">
                             <img src="./assets/Open-Status.png"/>
                             <div id="priority-btn"></div>
                         </figure>
                         <div class="mt-3">
-                        
                             <h2 class="card-title">${issue.title}</h2>
-                            <p class="line-clamp-2">${issue.description}
-                            </p>
-                            <div class="card-actions justify-start mt-3 flex" id="label-buttons">
-
-                            </div>
+                            <p class="line-clamp-2">${issue.description}</p>
+                            <div class="card-actions justify-start mt-3 flex" id="label-buttons"></div>
                         </div>
                     </div>
 
                     <div class="border-2 border-[#F8FAFC]"></div>
 
-                    <div class=" rounded-2xl p-3 h-22 flex justify-between ">
+                    <div class="rounded-2xl p-3 h-22 flex justify-between">
                         <div>
                             <p>#${unique} ${issue.author}</p>
                             <p>${issue.assignee}</p>
@@ -91,7 +105,11 @@ function displayIssues(issues) {
                             <p>updated: ${issue.updatedAt.slice(0, 10)}</p>
                         </div>
                     </div>
-                </div>`: `<div onclick="openModal('${issue.id}')" class="card bg-base-100 p-0 bg-white rounded-2xl border-t-4 border-t-[#A855F7]">
+                </div>`
+
+            :
+
+            `<div onclick="openModal('${issue.id}')" class="card bg-base-100 p-0 bg-white rounded-2xl border-t-4 border-t-[#A855F7]">
                     <div class="p-3 h-72">
                         <figure class="flex justify-between">
                             <img src="./assets/Closed- Status .png"/>
@@ -99,20 +117,17 @@ function displayIssues(issues) {
                         </figure>
                         <div class="mt-3">
                             <h2 class="card-title">${issue.title}</h2>
-                            <p class="line-clamp-2">${issue.description}
-                            </p>
-                            <div class="card-actions justify-start mt-3 flex" id="label-buttons">
-
-                            </div>
+                            <p class="line-clamp-2">${issue.description}</p>
+                            <div class="card-actions justify-start mt-3 flex" id="label-buttons"></div>
                         </div>
                     </div>
 
                     <div class="border-2 border-[#F8FAFC]"></div>
 
-                    <div class=" rounded-2xl p-3 h-22 flex justify-between ">
+                    <div class="rounded-2xl p-3 h-22 flex justify-between">
                         <div>
                             <p>#${unique} ${issue.author}</p>
-                            <p> ${issue.assignee}</p>
+                            <p>${issue.assignee}</p>
                         </div>
                         <div>
                             <p>${issue.createdAt.slice(0, 10)}</p>
@@ -121,37 +136,57 @@ function displayIssues(issues) {
                     </div>
                 </div>`}`
 
+
         const labelContainer = card.querySelector("#label-buttons");
+
         issue.labels.forEach(label => {
             labelContainer.appendChild(labelCheker(label));
-        })
+        });
+
         const priorityBtn = card.querySelector("#priority-btn");
-        // console.log(priorityBtn)
-        const priorityBtnElement = issue.priority;
-        // console.log(priorityBtnElement)
+
         priorityBtn.appendChild(priorityBtnSelector(issue.priority));
 
         const target = document.getElementById("cards");
+
         target.appendChild(card);
-    })
-}
 
-function applyStatusFilter(status) {
-    const allCards = document.querySelectorAll("#cards .issue-card");
-    let visibleCount = 0;
-
-    allCards.forEach((card) => {
-        const isVisible = status === "all" || card.dataset.status === status;
-        card.style.display = isVisible ? "block" : "none";
-        if (isVisible) {
-            visibleCount++;
-        }
     });
 
-    // Counter ta update kortesi eikhane 
-    const issueCounter = document.getElementById("issue-counter");
-    issueCounter.innerHTML = visibleCount;
 }
+
+
+// filter
+function applyStatusFilter(status) {
+
+    showSpinner();
+
+    setTimeout(() => {
+
+        const allCards = document.querySelectorAll("#cards .issue-card");
+
+        let visibleCount = 0;
+
+        allCards.forEach((card) => {
+
+            const isVisible = status === "all" || card.dataset.status === status;
+
+            card.style.display = isVisible ? "block" : "none";
+
+            if (isVisible) visibleCount++;
+
+        });
+
+        const issueCounter = document.getElementById("issue-counter");
+
+        issueCounter.innerHTML = visibleCount;
+
+        hideSpinner();
+
+    }, 300);
+
+}
+
 function showAll() {
     applyStatusFilter("all");
 }
@@ -164,26 +199,32 @@ function showClose() {
     applyStatusFilter("closed");
 }
 
+
+// label
 function labelCheker(label) {
+
     const btn = document.createElement("button");
+
     btn.classList.add("btn", "btn-soft", "rounded-4xl");
 
     if (label === "bug") {
         btn.innerHTML = `<i class="fa-solid fa-bug"></i> BUG`;
         btn.classList.add("btn-secondary");
-    } else if (label === "help wanted") {
+    }
+    else if (label === "help wanted") {
         btn.innerHTML = `<i class="fa-brands fa-hire-a-helper"></i> HELP WANTED`;
         btn.classList.add("btn-warning");
-    } else if (label === "enhancement") {
-        btn.innerHTML = `<i class="fa-solid fa-star" style="color: rgb(0, 169, 110);"></i> ENHANCEMENT`;
+    }
+    else if (label === "enhancement") {
+        btn.innerHTML = `<i class="fa-solid fa-star"></i> ENHANCEMENT`;
         btn.classList.add("btn-success");
     }
     else if (label === "documentation") {
-        btn.innerHTML = `<i class="fa-brands fa-readme" style="color: rgb(80, 94, 190);"></i> Documentation`;
+        btn.innerHTML = `<i class="fa-brands fa-readme"></i> Documentation`;
         btn.classList.add("btn-primary");
     }
     else if (label === "good first issue") {
-        btn.innerHTML = `<i class="fa-solid fa-thumbs-up" style="color: rgb(80, 142, 190);"></i> GOOD FIRST ISSUE`;
+        btn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> GOOD FIRST ISSUE`;
         btn.classList.add("btn-info");
     }
 
@@ -191,89 +232,102 @@ function labelCheker(label) {
 }
 
 
-
+// priority
 function priorityBtnSelector(priority) {
+
     const btn = document.createElement("button");
+
     btn.classList.add("btn", "btn-soft", "rounded-4xl");
+
     if (priority === "high") {
         btn.innerHTML = `HIGH`;
         btn.classList.add("btn-secondary")
-    } else if (priority === "medium") {
+    }
+    else if (priority === "medium") {
         btn.innerHTML = `Medium`;
         btn.classList.add("btn-warning")
-    } else if (priority === "low") {
-        btn.innerHTML = `LOW`;
-        btn.classList.add("default")
     }
+    else if (priority === "low") {
+        btn.innerHTML = `LOW`
+    }
+
     return btn;
 }
 
+
+// ================= MODAL =================
+
 async function openModal(issueId) {
-    // console.log(issueId);
+
+    showSpinner();
+
     const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${issueId}`);
     const data = await res.json();
+
     const issueDetail = data.data;
-    // console.log(issueDetail.title);
+
+    hideSpinner();
 
     issueDetailsModal.showModal();
-    dialog = `<div class="modal-box">
-    <h1 class="font-bold" id="modal-title">${issueDetail.title}</h1>
-    <div id="modal-description" class="flex gap-2 items-center justify-start">
-        <div id="modal-status">${openCloseBtn(issueDetail.status)}</div>
-        <div class="border h-1 w-1 rounded-2xl border-[#64748B]"></div>
-        <div>
-            <p>${issueDetail.author}</p>
-        </div>
-        <div class="border h-1 w-1 rounded-2xl border-[#64748B]"></div>
-        <div>
-            <p>${issueDetail.createdAt.slice(0, 10)}</p>
-        </div>
-    </div>
-    <div id="modal-label" class="my-6">
 
+    const dialog = `<div class="modal-box">
+
+    <h1 class="font-bold">${issueDetail.title}</h1>
+
+    <div class="flex gap-2 my-3">
+        ${issueDetail.status === "open"
+            ? `<button class="btn btn-soft rounded-4xl btn-success">Open</button>`
+            : `<button class="btn btn-soft rounded-4xl btn-primary">Closed</button>`}
+
+        <p>${issueDetail.author}</p>
+        <p>${issueDetail.createdAt.slice(0,10)}</p>
     </div>
-    <div>
-        <p id="modal-content">${issueDetail.description}</p>
-    </div>
+
+    <div id="modal-label" class="my-4"></div>
+
+    <p>${issueDetail.description}</p>
+
     <div class="flex justify-between p-4 bg-[#F8FAFC] rounded-2xl my-6">
         <div>
-            <p>Assignee: </p>
-            <p id="modal-assignee-name">${issueDetail.assignee}</p>
+            <p>Assignee:</p>
+            <p>${issueDetail.assignee}</p>
         </div>
-        <div id="modal-priority-container">
-            <p id="modal-priority">Priority:</p>
+
+        <div>
+            <p>Priority:</p>
             ${priorityBtnSelector(issueDetail.priority).outerHTML}
         </div>
     </div>
+
     <div class="flex justify-end">
         <button class="btn btn-primary" onclick="issueDetailsModal.close()">Close</button>
     </div>
-</div>`
+
+</div>`;
 
     issueDetailsModal.innerHTML = dialog;
 
-    function openCloseBtn(status) {
-        if (status === "open") {
-            return `<button class="btn btn-soft rounded-4xl btn-success">Open</button>`;
-        }
-        return `<button class="btn btn-soft rounded-4xl btn-primary">Closed</button>`;
-    }
+    const labelContainer = document.getElementById("modal-label");
 
     issueDetail.labels.forEach(label => {
-        const labelContainer = document.getElementById("modal-label");
         labelContainer.appendChild(labelCheker(label));
     });
 
 }
 
+
+// search
 const searchInput = document.getElementById("input-text");
-// console.log(searchInput);
 
 searchInput.addEventListener("input", async function () {
+
     const keyword = searchInput.value.trim();
+
+    showSpinner();
 
     if (!keyword) {
         await issues();
+        hideSpinner();
         return;
     }
 
@@ -281,7 +335,9 @@ searchInput.addEventListener("input", async function () {
     const data = await res.json();
 
     renderIssueCards(data.data);
-    
+
+    hideSpinner();
+
 });
 
 issues();
