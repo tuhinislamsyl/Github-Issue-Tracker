@@ -7,7 +7,6 @@ const openBtn = document.getElementById("openBtn");
 const closed = document.getElementById("closed");
 
 
-// spinner helpers
 function showSpinner() {
     spinner.classList.remove("hidden");
 }
@@ -17,7 +16,6 @@ function hideSpinner() {
 }
 
 
-// toggle button
 function btnController(button) {
 
     const buttons = [allBtn, openBtn, closed];
@@ -156,7 +154,6 @@ function displayIssues(issues) {
 }
 
 
-// filter
 function applyStatusFilter(status) {
 
     showSpinner();
@@ -200,7 +197,6 @@ function showClose() {
 }
 
 
-// label
 function labelCheker(label) {
 
     const btn = document.createElement("button");
@@ -232,7 +228,6 @@ function labelCheker(label) {
 }
 
 
-// priority
 function priorityBtnSelector(priority) {
 
     const btn = document.createElement("button");
@@ -253,9 +248,6 @@ function priorityBtnSelector(priority) {
 
     return btn;
 }
-
-
-// ================= MODAL =================
 
 async function openModal(issueId) {
 
@@ -316,7 +308,6 @@ async function openModal(issueId) {
 }
 
 
-// search
 const searchInput = document.getElementById("input-text");
 
 searchInput.addEventListener("input", async function () {
