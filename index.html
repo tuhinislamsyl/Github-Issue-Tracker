@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- tailwindcss + daisyui -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Font Awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/tailwind.config.js">
+
+    <title>GitHub Issues Tracker</title>
+    <link rel="shortcut icon" href="./assets/github-logo.png" type="image/x-icon">
+</head>
+
+<body>
+    <section class="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div class="card w-full max-w-md bg-base-100 shadow-xl border border-gray-100">
+            <div class="card-body items-center text-center">
+
+                <div class="text-5xl mb-2">
+                    <img src="./assets/github-logo.png" alt="">
+                </div>
+                <h2 class="card-title text-2xl font-bold">GitHub Issues Tracker</h2>
+                <p class="text-sm text-gray-500 mb-6">Sign in to manage your issues</p>
+
+                <div class="form-control w-full">
+                    <p class="font-medium text-black-700 justifys flex flex-row justify-start pb-1 text-xl">Username
+                    </p>
+                    <input id="username" type="text" placeholder="Enter Username" class="input input-bordered w-full" />
+                    <label class="label pt-1 flex flex-row justify-start">
+                        <span class="label-text-alt font-medium text-[#6000FF]">Default: admin</span>
+                    </label>
+                </div>
+                <div class="form-control w-full">
+                    <p class="font-medium text-black-700 justify-start flex flex-row pb-1 text-xl">Password</p>
+                    <input id="password" type="password" placeholder="Enter Password" class="input input-bordered w-full" />
+                    <label class="label pt-1 flex flex-row justify-start">
+                        <span class="label-text-alt font-medium text-[#6000FF]">Default: admin123</span>
+                    </label>
+                </div>
+                <div class="form-control mt-6 w-full">
+                    <button id="sign-in-btn"
+                        class="btn border-none bg-[#6000FF] hover:bg-[#5000D2] text-white text-lg font-semibold w-full">
+                        Sign In
+                    </button>
+                </div>
+                <div class="divider text-gray-400 text-sm my-6">OR</div>
+                <div class="text-center w-full">
+                    <p class="text-gray-500 text-sm mb-3">Demo Credentials:</p>
+                    <div class="bg-slate-50 border border-gray-100 rounded-lg py-4 px-6 inline-block w-full">
+                        <p class="text-gray-700 font-semibold text-lg">
+                            Username: <span class="font-normal text-gray-600">admin</span>
+                        </p>
+                        <p class="text-gray-700 font-semibold text-lg">
+                            Password: <span class="font-normal text-gray-600">admin123</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./script/index.js"></script>
+</body>
+
+</html>
